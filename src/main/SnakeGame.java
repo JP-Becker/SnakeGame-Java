@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.Random;
 import javax.swing.*;
 
-public class SnakeGame extends JPanel implements ActionListener {
+public class SnakeGame extends JPanel implements ActionListener, KeyListener {
     
     private class Quadrado {
         int x;
@@ -15,7 +15,6 @@ public class SnakeGame extends JPanel implements ActionListener {
         Quadrado(int x, int y) {
             this.x = x;
             this.y = y;
-            
         }
     }
     
@@ -29,11 +28,16 @@ public class SnakeGame extends JPanel implements ActionListener {
     
     Timer gameLoop;
     
+    int velocidadeX;
+    int velocidadeY;
+    
     SnakeGame(int boardWidth, int boardHeight) {
         this.boardWidth = boardWidth;
         this.boardHeight = boardHeight;
         setPreferredSize(new Dimension(this.boardWidth, this.boardHeight));
         setBackground(Color.black);
+        addKeyListener(this);
+        setFocusable(true);
         
         snakeHead = new Quadrado(5, 5);
         
@@ -41,6 +45,9 @@ public class SnakeGame extends JPanel implements ActionListener {
         
         random = new Random();
         posicionarComida();
+        
+        velocidadeX = 0;
+        velocidadeY = 0;
         
         gameLoop = new Timer(100, this);
         gameLoop.start();
@@ -71,12 +78,48 @@ public class SnakeGame extends JPanel implements ActionListener {
     // funcao para posicionar a maçã aleatóriamente na tela
     public void posicionarComida () {
         comida.x = random.nextInt(boardWidth/tamanhoQuadrado);
-        comida.x = random.nextInt(boardHeight/tamanhoQuadrado);
+        comida.y = random.nextInt(boardHeight/tamanhoQuadrado);
+    }
+    
+    public void move() {
+        snakeHead.x += velocidadeX;
+        snakeHead.y += velocidadeY;
     }
     
     @Override
     public void actionPerformed(ActionEvent e) {
+        move();
         repaint(); // vai ficar repetindo a função draw para que o jogo rode
     }
+    
+    @Override
+    public void keyPressed (KeyEvent e) {
+        switch (e.getKeyCode()) {
+            case KeyEvent.VK_UP:
+                velocidadeX = 0;
+                velocidadeY = -1;
+                break;
+            case KeyEvent.VK_DOWN:
+                velocidadeX = 0;
+                velocidadeY = 1;
+                break;
+            case KeyEvent.VK_LEFT:
+                velocidadeX = -1;
+                velocidadeY = 0;
+                break;
+            case KeyEvent.VK_RIGHT:
+                velocidadeX = 1;
+                velocidadeY = 0;
+                break;
+            default:
+                break;
+        }
+    }
+    
+    @Override
+    public void keyTyped(KeyEvent e) {}
+
+    @Override
+    public void keyReleased(KeyEvent e) {}
     
 }
