@@ -83,7 +83,15 @@ public class SnakeGame extends JPanel implements ActionListener, KeyListener {
         
         for (int i = 0;i < snakeBody.size(); i++){
             Quadrado snakePart = snakeBody.get(i);
-            g.fillRect(snakePart.x * tamanhoQuadrado, snakePart.y * tamanhoQuadrado, tamanhoQuadrado, tamanhoQuadrado);
+            g.fill3DRect(snakePart.x * tamanhoQuadrado, snakePart.y * tamanhoQuadrado, tamanhoQuadrado, tamanhoQuadrado, true);
+        }
+        
+        g.setFont(new Font("Arial", Font.PLAIN, 20));
+        if (gameOver) {
+            g.setColor(Color.red);
+            g.drawString("O jogo acabou, você obteve " + String.valueOf(snakeBody.size()) + " pontos", tamanhoQuadrado - 16, tamanhoQuadrado);
+        } else {
+            g.drawString("Pontuação: " + String.valueOf(snakeBody.size()), tamanhoQuadrado - 16, tamanhoQuadrado);
         }
     }
     
