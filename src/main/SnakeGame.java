@@ -104,6 +104,19 @@ public class SnakeGame extends JPanel implements ActionListener, KeyListener {
             posicionarComida();
         }
         
+        //Loop pra fazer as partes da cobra seguirem a cabeça
+        for (int i = snakeBody.size()-1; i >= 0; i--) {
+            Quadrado snakePart = snakeBody.get(i);
+            if (i == 0) {
+               snakePart.x = snakeHead.x;
+               snakePart.y = snakeHead.y;
+            } else {
+                Quadrado snakePartAnterior = snakeBody.get(i - 1);
+                snakePart.x = snakePartAnterior.x;
+                snakePart.y = snakePartAnterior.y;
+            }
+        }
+        
         snakeHead.x += velocidadeX;
         snakeHead.y += velocidadeY;
     }
