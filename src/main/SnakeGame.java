@@ -36,6 +36,8 @@ public class SnakeGame extends JPanel implements ActionListener, KeyListener {
     int velocidadeX;
     int velocidadeY;
     
+    boolean gameOver = false;
+    
     SnakeGame(int boardWidth, int boardHeight) {
         this.boardWidth = boardWidth;
         this.boardHeight = boardHeight;
@@ -119,12 +121,28 @@ public class SnakeGame extends JPanel implements ActionListener, KeyListener {
         
         snakeHead.x += velocidadeX;
         snakeHead.y += velocidadeY;
+        
+        for (int i = 0; i < snakeBody.size(); i++) {
+            Quadrado snakePart = snakeBody.get(i);
+            if (colisao(snakeHead, snakePart)) {
+                gameOver = true;
+            }
+        }
+        
+        if (snakeHead.x* tamanhoQuadrado < 0 || snakeHead.x* tamanhoQuadrado >= boardWidth ||
+                snakeHead.y* tamanhoQuadrado < 0 || snakeHead.y* tamanhoQuadrado >= boardHeight) {
+            gameOver = true;
+        }
     }
     
     @Override
     public void actionPerformed(ActionEvent e) {
         move();
         repaint(); // vai ficar repetindo a função draw para que o jogo rode
+        
+        if (gameOver) {
+            gameLoop.stop();
+        }
     }
     
     @Override
