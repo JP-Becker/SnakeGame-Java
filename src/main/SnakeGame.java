@@ -22,9 +22,14 @@ public class SnakeGame extends JPanel implements ActionListener, KeyListener {
     int boardHeight;
     int tamanhoQuadrado = 25;
     
+    // Cobra
     Quadrado snakeHead;
+    ArrayList<Quadrado> snakeBody; // ArrayList pra guardar as partes do corpo da cobra
+    
+    // Maçã
     Quadrado comida;
     Random random;
+    
     
     Timer gameLoop;
     
@@ -40,6 +45,7 @@ public class SnakeGame extends JPanel implements ActionListener, KeyListener {
         setFocusable(true);
         
         snakeHead = new Quadrado(5, 5);
+        snakeBody = new ArrayList<Quadrado>();
         
         comida = new Quadrado(10, 10);
         
@@ -72,6 +78,11 @@ public class SnakeGame extends JPanel implements ActionListener, KeyListener {
         // Cobra
         g.setColor(Color.GREEN);
         g.fillRect(snakeHead.x * tamanhoQuadrado, snakeHead.y * tamanhoQuadrado, tamanhoQuadrado, tamanhoQuadrado);
+        
+        for (int i = 0;i < snakeBody.size(); i++){
+            Quadrado snakePart = snakeBody.get(i);
+            g.fillRect(snakePart.x * tamanhoQuadrado, snakePart.y * tamanhoQuadrado, tamanhoQuadrado, tamanhoQuadrado);
+        }
     }
     
     
@@ -81,7 +92,18 @@ public class SnakeGame extends JPanel implements ActionListener, KeyListener {
         comida.y = random.nextInt(boardHeight/tamanhoQuadrado);
     }
     
+    public boolean colisao (Quadrado q1, Quadrado q2) {
+        return q1.x == q2.x && q1.y == q2.y;
+    }
+    
     public void move() {
+        
+        // if para a cobra "comer" a maçã
+        if (colisao(snakeHead, comida)) {
+            snakeBody.add(new Quadrado(comida.x, comida.y));
+            posicionarComida();
+        }
+        
         snakeHead.x += velocidadeX;
         snakeHead.y += velocidadeY;
     }
