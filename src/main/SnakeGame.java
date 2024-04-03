@@ -168,6 +168,14 @@ public class SnakeGame extends JPanel implements ActionListener, KeyListener {
             velocidadeX = 1;
             velocidadeY = 0;
         }
+        if (e.getKeyCode() == KeyEvent.VK_SPACE && gameOver) {
+            snakeHead = new Quadrado(5, 5);
+            snakeBody = new ArrayList<Quadrado>();
+            velocidadeX = 0;
+            velocidadeY = 0;
+            gameOver = false;
+            gameLoop.start();
+        }
     }
     
     @Override
