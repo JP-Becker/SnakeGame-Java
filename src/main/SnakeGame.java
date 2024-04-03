@@ -21,6 +21,7 @@ public class SnakeGame extends JPanel implements ActionListener, KeyListener {
     int boardWidth;
     int boardHeight;
     int tamanhoQuadrado = 25;
+    int maiorPontuacao = 0;
     
     // Cobra
     Quadrado snakeHead;
@@ -87,11 +88,20 @@ public class SnakeGame extends JPanel implements ActionListener, KeyListener {
         }
         
         g.setFont(new Font("Arial", Font.PLAIN, 20));
+        
+        // Mensagens a serem mostradas caso o usuário bata na parede ou na cobra
         if (gameOver) {
             g.setColor(Color.red);
-            g.drawString("O jogo acabou, você obteve " + String.valueOf(snakeBody.size()) + " pontos", tamanhoQuadrado - 16, tamanhoQuadrado);
+            int posicaoXCentral = boardWidth / 6;
+            int alturaTotalStrings = g.getFont().getSize() * 2 + 5;
+            int posicaoYCentral = boardHeight / 2 - alturaTotalStrings / 2;
+
+            g.drawString("O jogo acabou, você obteve: " + String.valueOf(snakeBody.size()) + " pontos", posicaoXCentral, posicaoYCentral);
+            g.drawString("a sua maior pontuação: " + String.valueOf(maiorPontuacao)+ " pontos", posicaoXCentral, posicaoYCentral + g.getFont().getSize() + 5);
+            g.setColor(Color.white);
+            g.drawString("Aperte 'ESPAÇO' para reiniciar o jogo.", posicaoXCentral,  posicaoYCentral + g.getFont().getSize() + 30);
         } else {
-            g.drawString("Pontuação: " + String.valueOf(snakeBody.size()), tamanhoQuadrado - 16, tamanhoQuadrado);
+            g.drawString("PONTUAÇÃO: " + String.valueOf(snakeBody.size()), boardWidth/3, tamanhoQuadrado);
         }
     }
     
@@ -140,6 +150,12 @@ public class SnakeGame extends JPanel implements ActionListener, KeyListener {
         if (snakeHead.x* tamanhoQuadrado < 0 || snakeHead.x* tamanhoQuadrado >= boardWidth ||
                 snakeHead.y* tamanhoQuadrado < 0 || snakeHead.y* tamanhoQuadrado >= boardHeight) {
             gameOver = true;
+        }
+        
+        if (gameOver) {
+            if (snakeBody.size() > maiorPontuacao) {
+                maiorPontuacao = snakeBody.size();
+            }
         }
     }
     
